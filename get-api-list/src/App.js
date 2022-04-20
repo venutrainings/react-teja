@@ -45,9 +45,10 @@ var postData = {
 const sendData =() =>{
   sendHttpRequest('POST', 'https://gorest.co.in/public/v2/users', {
 
-   "name":"Chikita Adiga",
-   "email":"chikita_a1diga@predovic.name",
-   "gender":"female",
+    "name":"Bodhrman",
+    "email":"bn_varn@hoppe.info",
+    "gender":"male",
+    "status":"active"
     
   }).then(responseData =>{
     console.log("post data success" +responseData)
@@ -55,7 +56,7 @@ const sendData =() =>{
 }
 
 const updateData =() =>{
-  sendHttpRequest('PUT', 'https://gorest.co.in/public/v2/users/2736', {
+  sendHttpRequest('PUT', 'https://gorest.co.in/public/v2/users/4012', {
 
     "id":2736,
     "name":"Bodhan rman",
