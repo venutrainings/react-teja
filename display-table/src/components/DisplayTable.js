@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import Modal from "react-bootstrap/Modal";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 
 function DisplayTable() {
-
-  
-  const [tableData, setTableData] =useState([{
+  const [tableData, setTableData] =useState([
+  {
     "id" : 1,
     "name" : "Dharma",
     "place" : "Gudivada",
@@ -47,36 +46,28 @@ function DisplayTable() {
     "place" : "Sircilla",
     "dob" : "13-05-1991",
     "age" : 28,
-  },
-  
-  ])
-  
-  const colNames=['id', 'name', 'place', 'dob', 'age', 'action']
-  
-
-  const [searchVal, setSearchVal] = useState('');
-  const [filteredData, setFilteredData] = useState(tableData);
-
-  const filterTable = (e) => {
-    setSearchVal(e.target.value)
-    let result = [];
-
-    if (e.target.value.length >= 2) {
-      setSearchVal(e.target.value)
-      result = tableData.filter(val => {
-        return val.name.toLowerCase().includes(e.target.value.toLowerCase());
-      })
-      setFilteredData(result)
-    } else {
-      setSearchVal("");
-      result = tableData;
-      setFilteredData(result);
-    }
   }
+  
+  ]);
+  const [filterData, setFilterData] =useState(tableData);
+  const [search, setSearch] =useState('');
+  const [newData, setNewData] = useState( {
+    
+    "id" : "",
+    "name" : "",
+    "place" : "",
+    "dob" : "",
+    "age" : "",
+  
+  });
+  const [isOpen, setIsOpen] = useState(false);
+  const colNames=['id', 'name', 'place', 'dob', 'age', 'action'];
+  const onAddData = ({name,value}) =>{
+    setNewData({...newData, [name]:value, id:tableData.length + 1});
+  };
 
-
-  const randomNum =parseInt(Math.random()*1000);
-  const [newData, setNewData] =useState( {
+  const resetRecord = () => {
+    setNewData({
     
       "id" : "",
       "name" : "",
@@ -84,34 +75,26 @@ function DisplayTable() {
       "dob" : "",
       "age" : "",
     
-  })
-  const onAddData = (e) =>{
-    const addData = {...newData}
-    newData[e.target.id] =e.target.value
-    
-    setNewData(addData)
-    console.log(newData)
-
-    // setFilteredData(pre =>{
-    //   return [...pre, newData]
-    // })
+    });
   }
 
-  const submitNewData =(e) =>{
+  useEffect(() =>{
+    if(search.length > 2)
+    setFilterData(tableData.filter(val => {
+      return val.name.toLowerCase().includes(search.toLowerCase());
+    }));
+    else
+    setFilterData(tableData);
+  },[tableData,search]);
+
+  const AddRecord = (e) =>
+  {
     e.preventDefault();
-    
-    setFilteredData({
-      id: randomNum,
-      name :newData.name,
-      place :newData.place,
-      dob : newData.dob,
-      age : newData.age
-    })
+    setTableData([...tableData,newData]);
+    resetRecord();
+    setIsOpen(false);
   }
-
-  const [isOpen, setIsOpen] = React.useState(false);
-
-  const showModal = () => {
+   const showModal = () => {
     setIsOpen(true);
   };
 
@@ -122,50 +105,49 @@ function DisplayTable() {
   return (
     <div>
         <button onClick={showModal}>Add Data</button>
-
         <Modal show={isOpen} onHide={hideModal}>
         <Modal.Header>
           <Modal.Title>Add New Data</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <form onSubmit={(e) => submitNewData(e)}>
-          <div class="row">
-          <div class="col-6 mb-3">
-    <label for="name" class="form-label">Name</label>
-    <input onChange={(e) => onAddData(e)} type="text" class="form-control" id="name" aria-describedby="name"></input>
-  </div>
-  <div class="col-6 mb-3">
-    <label for="place" class="form-label">Place</label>
-    <input onChange={(e) => onAddData(e)} type="text" class="form-control" id="place"></input>
-  </div>
+        <form>
+          <div className="row">
+          < div className="col-6 mb-3">
+              <label className="form-label">Name</label>
+              <input value={newData.name} onChange={(e) => onAddData(e.target)} className="form-control" name="name" ></input>
           </div>
+        <div className="col-6 mb-3">
+          <label className="form-label">Place</label>
+          <input value={newData.place} onChange={(e) => onAddData(e.target)} className="form-control" name="place"></input>
+        </div>
+      </div>
  
- <div class="row">
+ <div className="row">
 
- <div class="col-6 mb-3">
-  <label for="dob" class="form-label">Date of Birth</label>
-    <input onChange={(e) => onAddData(e)} type="text" class="form-control" id="dob"></input>
+ <div className="col-6 mb-3">
+  <label className="form-label">Date of Birth</label>
+    <input value={newData.dob} onChange={(e) => onAddData(e.target)} className="form-control" name="dob"></input>
   </div>
 
-  <div class="col-6 mb-3">
-  <label for="age" class="form-label">Age</label>
-    <input onChange={(e) => onAddData(e)} type="text" class="form-control" id="age"></input>
+  <div className="col-6 mb-3">
+  <label className="form-label">Age</label>
+    <input value={newData.age} onChange={(e) => onAddData(e.target)} className='form-control' name="age"></input>
   </div>
 
  </div>
  
- <button>Submit</button>
+ <button onClick={(e) => AddRecord(e)}>Submit</button>
 </form>
 
         </Modal.Body>
         <Modal.Footer>
-          <button onClick={hideModal}>Cancel</button>
-          <button onClick={(e) => submitNewData(e)}>Add</button>
         </Modal.Footer>
       </Modal>
 
-      <input type='text' placeholder='Search' onChange={filterTable}></input>
-      {filteredData.length > 0 && (
+      <input onChange={(e) => { 
+        setSearch(e.target.value);
+      }} placeholder='Search'></input>
+      {tableData.length > 0 && (
         <table cellSpacing="0" style={{ width: 'auto', height: 'auto', padding: '5px 10px' }}>
           <thead>
             <tr>
@@ -179,7 +161,7 @@ function DisplayTable() {
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((obj, index1) =>
+            {filterData.map((obj, index1) =>
               <tr key={index1}>
                 {Object.values(obj).map((value, index2) => (
                   <td key={index2}>{value}</td>

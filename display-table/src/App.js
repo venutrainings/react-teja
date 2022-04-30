@@ -1,12 +1,6 @@
-import logo from './logo.svg';
 import React, {useState} from 'react';
-
-
 import './App.css';
 import DisplayTable from './components/DisplayTable';
-import HooksFirst from './components/HooksFirst';
-
-
 
 function App() {
 
@@ -15,7 +9,6 @@ function App() {
 
   return (
     <div className="App">
-      
       <button  onClick={() => setShow(true)}>Get Data</button>
 
       {
