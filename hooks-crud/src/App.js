@@ -18,7 +18,7 @@ import UpdateRecord from './component/pages/UpdateRecord';
             <Route path="/about" element={<About/>} />
             <Route path="/contact" element={<Contact/>} />
             <Route path="/addRecord" element={<AddRecord/>} />
-            <Route path="/updateRecord" element={<UpdateRecord/>} />
+            <Route path="/updateRecord/:id" element={<UpdateRecord/>} />
 
             <Route  element={<NotFound/>} />
 
