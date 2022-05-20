@@ -38,18 +38,18 @@ const UpdateRecord = (props) =>{
        
        }
 
-      const onUpdateData = ({ name, value }) => {
+      // const onUpdateData = ({ name, value }) => {
         
-        setNewData({ ...newData, [name]: value} );
-      };
+      //   setNewData({ ...newData, [name]: value} );
+      // };
 
       const UpdateRecord = async( id, e)  => {
         e.preventDefault();
-
+       
          await  axios({
         method: 'put', //you can set what request you want to be
         url: `https://gorest.co.in/public/v2/users/${id}`,
-        data: newData,
+        data: users,
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
@@ -66,16 +66,17 @@ const UpdateRecord = (props) =>{
     return(
         <div className="container">
             <h1>Update Record</h1>
-
+ 
             <form>
-            <div className="row">
+            <div className="row"> 
               < div className="col-6 mb-3">
                 <label className="form-label">Name</label>
-                <input type='text' value={users.name} onChange={(e) => onUpdateData(setUsers(e.target.value))} className="form-control" name="name"   ></input>
+
+                <input type='text' value={users.name || ''} onChange={(e) => setUsers(e.target.value)} className="form-control" name="name"   ></input>
               </div>
               <div className="col-6 mb-3">
                 <label className="form-label">E-mail</label>
-                <input value={users.email} onChange={(e) => onUpdateData(setUsers(e.target.value))} className="form-control" name="email" type='email'></input>
+                <input value={users.email || ''} onChange={(e) => setUsers(e.target.value)} className="form-control" name="email" type='email'></input>
               </div>
             </div>
 
@@ -83,12 +84,12 @@ const UpdateRecord = (props) =>{
 
               <div className="col-6 mb-3">
                 <label className="form-label">Gender</label>
-                <input value={users.gender} onChange={(e) => onUpdateData(setUsers(e.target.value))} className="form-control" name="gender"></input>
+                <input value={users.gender || ''} onChange={(e) => setUsers(e.target.value)} className="form-control" name="gender"></input>
               </div>
 
               <div className="col-6 mb-3">
                 <label className="form-label">Status</label>
-                <input value={users.status} onChange={(e) => onUpdateData(setUsers(e.target.value))} className='form-control' name="status"></input>
+                <input value={users.status || ''} onChange={(e) => setUsers(e.target.value)} className='form-control' name="status"></input>
               </div>
 
             </div>
